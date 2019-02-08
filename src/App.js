@@ -7,6 +7,7 @@ import './App.css';
 import Home from './views/home';
 import 'bootstrap/dist/css/bootstrap.css';
 import Jogadores from './views/jogadores';
+import Jogador from './views/jogador';
 
 class App extends Component {
   render() {
@@ -21,6 +22,7 @@ class App extends Component {
               <Route  path = "/" exact component = {Home}/>          
               <Route path = "/home" component = {Home} />          
               <Route path = "/jogadores" component = {Jogadores} />
+              <Route path="/jogador/:id" component={Jogador}/>
             </div>
           </div>         
         </div>        
