@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {firebaseDatabase} from '../services/firebaseConfig';
 import { Link } from "react-router-dom";
+import Posicao from '../components/posicao';
 
 class Jogadores extends Component {
 
@@ -10,6 +11,7 @@ class Jogadores extends Component {
             jogadores : [],           
             nome:'',
             posicao:'',
+            ativo:true
         }
 
         this.addJogador = this.addJogador.bind(this);
@@ -23,14 +25,29 @@ class Jogadores extends Component {
                 <h4>Jogadores</h4>
                 <hr/>
                 <div className="row">
-                    <div className="col-4">
-                        <input type="text" placeholder="nome" name="nome" id="nome" value={this.state.nome.value} onChange={this.handleJogador}/>
-                        <input type="text" placeholder="posicao" name="posicao" id="posicao" value={this.state.posicao.value} onChange={this.handleJogador}/>
-                        <button onClick={this.addJogador}>Add Jogador</button>
+                    <div className="col-6 ">
+                        <div className='form-group'>
+                            <label>Nome:</label>
+                            <input type="text" className={'form-control'} name="nome" id="nome" value={this.state.nome.value} onChange={this.handleJogador}/>                        
+                        </div>
+                        <label>Posição:</label>
+                        <Posicao onJogador={this.handleJogador} posicao={this.state.posicao}/>
+                        <div  className='form-group'>
+                            <label>Ativo?</label>
+                            <input type="checkbox"  checked={this.state.ativo} onChange={this.handleJogador} name='ativo'/>
+                        </div>
+                        <button onClick={this.addJogador} className={'btn btn-warning'}>Add Jogador</button>
                     </div>
+                   
                     <div className="col-8">
-                        <ul>
-                            {this.state.jogadores.map((jogador,index)=><li key={index}> <Link to={"/jogador/"+jogador.id}> {jogador.nome} </Link> | <a href="" onClick={()=>this.removeJogador(jogador)}>X</a></li>)}
+                        <hr/>
+                        <ul className='list-group'>
+                            {this.state.jogadores.map(
+                                (jogador,index)=>                                
+                                <li className='list-group-item' key={index}> 
+                                    <Link to={"/jogador/"+jogador.id}> {jogador.nome} </Link> | <a href="" onClick={()=>this.removeJogador(jogador)}>X</a>
+                                </li>
+                                )}
                         </ul>
                     </div>
                 </div>
@@ -60,17 +77,18 @@ class Jogadores extends Component {
 
     handleJogador =(event)=>{
         const name = event.target.name;
-        const value = event.target.value;
+        const value = event.target.type ==='checkbox' ? event.target.checked : event.target.value;
         this.setState({[name] : value});
     }
 
     addJogador =(e)=>{
-        if(this.state.nome.length >0 && this.state.posicao.length>0 ){
+        if(this.state.nome.length >0 ){
             var jogador = {
                 gols :0,
                 jogos:0,
                 nome:this.state.nome,
-                posicao:this.state.posicao
+                posicao:this.state.posicao,
+                ativo:this.state.ativo
             }               
             firebaseDatabase.ref().child('jogadores').push(jogador,function(error){
                 if (error) {
@@ -100,7 +118,6 @@ class Jogadores extends Component {
 
     reset(){
         document.getElementById('nome').value = '';
-        document.getElementById('posicao').value = '';
     }
    
 }

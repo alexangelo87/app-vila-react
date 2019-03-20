@@ -30,3 +30,24 @@
     transform: rotate(360deg);
   }
 }
+
+a{
+  color: rgb(73, 71, 71) !important;
+}
+
+.container{
+  padding-top:30px;
+}
+
+.logo{
+  width: 40%;
+  margin-top: 10px;
+  
+}
+
+.list-group{
+  list-style-type: none;
+}
+.nav-link{
+  color:yellow !important;
+}
